@@ -224,7 +224,7 @@ export default function App() {
                 </div>
 
                 {/* The Luxury Bank Card */}
-                <div className="relative rounded-2xl bg-gradient-to-br from-teal-deep via-teal-forest to-[#021815] text-ivory p-6 sm:p-8 border border-champagne/40 shadow-xl overflow-hidden">
+                <div className="relative rounded-2xl bg-linear-to-br from-teal-deep via-teal-forest to-[#021815] text-ivory p-6 sm:p-8 border border-champagne/40 shadow-xl overflow-hidden">
                   {/* Subtle Background Rings */}
                   <div className="absolute -right-10 -bottom-10 w-48 h-48 rounded-full border border-champagne/10 pointer-events-none"></div>
                   <div className="absolute -right-20 -bottom-20 w-72 h-72 rounded-full border border-champagne/10 pointer-events-none"></div>
