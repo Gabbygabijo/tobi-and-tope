@@ -60,9 +60,11 @@ export default function App() {
       <header className="fixed top-0 left-0 right-0 z-50 bg-teal-deep/85 backdrop-blur-md border-b border-champagne/20 transition-all duration-300">
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
           <a href="#" className="flex items-center gap-3 group">
-            <div className="w-11 h-11 rounded-full border border-champagne flex items-center justify-center bg-teal-forest/90 shadow-gold-sm transition-transform duration-300 group-hover:scale-105">
-              <span className="font-display font-bold text-champagne text-xs tracking-wider">O◈T</span>
-            </div>
+            <img
+              src="/favicon.svg"
+              alt="O◈T Monogram"
+              className="w-11 h-11 rounded-full shadow-gold-sm transition-transform duration-300 group-hover:scale-105"
+            />
             <div>
               <span className="font-display text-sm tracking-widest uppercase text-champagne block">
                 Oluwatobi &amp; Temitope
@@ -779,9 +781,11 @@ export default function App() {
 
       {/* ======================= FOOTER ======================= */}
       <footer className="border-t border-champagne/20 py-12 px-6 text-center space-y-4 bg-teal-forest">
-        <div className="w-12 h-12 rounded-full border border-champagne flex items-center justify-center bg-teal-deep mx-auto shadow-gold-sm">
-          <span className="font-display font-bold text-champagne text-xs tracking-wider">O◈T</span>
-        </div>
+        <img
+          src="/favicon.svg"
+          alt="O◈T Monogram"
+          className="w-12 h-12 rounded-full mx-auto shadow-gold-sm"
+        />
         <h4 className="font-display text-lg text-champagne tracking-widest uppercase">
           Oluwatobi &amp; Temitope
         </h4>
