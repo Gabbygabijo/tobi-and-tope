@@ -1,111 +1,306 @@
+@import "tailwindcss";
+
+/* 
+ * ===================================================================
+ * WEDDING DESIGN SYSTEM: OLUWATOBI & TEMITOPE
+ * Palette: Deep Teal (#063A33), Ivory (#FAF6EE), & Champagne (#D4AF67)
+ * Extracted from the Official Wedding Invitation Card
+ * ===================================================================
+ */
+
+@theme {
+  /* --- Primary Color: Deep Forest Teal --- */
+  --color-teal-50: #f0f7f5;
+  --color-teal-100: #d6ebe6;
+  --color-teal-200: #b0d8ce;
+  --color-teal-300: #7ebfb0;
+  --color-teal-400: #4da290;
+  --color-teal-500: #2d8272;
+  --color-teal-600: #1d675b;
+  --color-teal-700: #144e45;
+  --color-teal-800: #0d3831;
+  --color-teal-900: #062823;
+  --color-teal-950: #031815;
+  
+  --color-teal-deep: #063a33;
+  --color-teal-forest: #03241f;
+  --color-teal-emerald: #09473e;
+  --color-teal-muted: #385a53;
+  --color-teal-border: rgba(6, 58, 51, 0.15);
+
+  /* --- Secondary Color: Warm Ivory & Cream --- */
+  --color-ivory-50: #ffffff;
+  --color-ivory-100: #fdfbf7;
+  --color-ivory-200: #faf6ee;
+  --color-ivory-300: #f5eedc;
+  --color-ivory-400: #ede0c4;
+  --color-ivory-500: #ded0ae;
+  --color-ivory-600: #c4b38d;
+  --color-ivory: #faf6ee;
+  --color-ivory-card: #fdfbf6;
+  --color-ivory-warm: #f6efe2;
+
+  /* --- Accent Color: Champagne & Royal Gold --- */
+  --color-champagne-50: #fdfcf7;
+  --color-champagne-100: #faeed7;
+  --color-champagne-200: #f5dfb2;
+  --color-champagne-300: #ecc784;
+  --color-champagne-400: #e2b25b;
+  --color-champagne-500: #d4af67;
+  --color-champagne-600: #be923e;
+  --color-champagne-700: #9c7328;
+  --color-champagne-800: #7e5c24;
+  --color-champagne-900: #674b20;
+  --color-champagne-gold: #cba158;
+  --color-champagne-light: #f5e4bd;
+  --color-champagne-dark: #a37c2d;
+  --color-champagne-border: rgba(212, 175, 103, 0.45);
+
+  /* --- Botanical Green Accents --- */
+  --color-botanical-leaf: #2c5e50;
+  --color-botanical-dark: #1a4237;
+  --color-botanical-sage: #8aa39b;
+
+  /* --- Typography Families --- */
+  --font-script: "Alex Brush", "Great Vibes", cursive;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-display: "Cinzel", "Playfair Display", serif;
+  --font-sans: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* --- Shadows & Elevations --- */
+  --shadow-gold-sm: 0 2px 10px rgba(212, 175, 103, 0.18);
+  --shadow-gold: 0 10px 25px -4px rgba(212, 175, 103, 0.28);
+  --shadow-gold-lg: 0 20px 45px -8px rgba(212, 175, 103, 0.38);
+  --shadow-teal-glow: 0 12px 36px -6px rgba(4, 39, 34, 0.45);
+  --shadow-card: 0 15px 40px -10px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(212, 175, 103, 0.2);
+
+  /* --- Border Radii (Wedding Arch Shapes) --- */
+  --radius-arch-sm: 80px 80px 16px 16px;
+  --radius-arch: 140px 140px 24px 24px;
+  --radius-arch-lg: 200px 200px 32px 32px;
+  --radius-pill: 9999px;
+}
+
+/* 
+ * -------------------------------------------------------------------
+ * CSS Custom Properties & Base Layer
+ * -------------------------------------------------------------------
+ */
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  --color-brand-teal: #063a33;
+  --color-brand-ivory: #faf6ee;
+  --color-brand-champagne: #d4af67;
+  --gold-gradient: linear-gradient(135deg, #f7e7c4 0%, #d4af67 50%, #b3883b 100%);
+  --gold-shimmer: linear-gradient(90deg, #d4af67 0%, #fff2d1 50%, #d4af67 100%);
+  --teal-gradient: linear-gradient(180deg, #063a33 0%, #03241f 100%);
+  --ivory-gradient: linear-gradient(180deg, #fcf9f2 0%, #f6efe2 100%);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+* {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  background-color: var(--color-teal-forest);
+  color: var(--color-ivory);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+/* 
+ * -------------------------------------------------------------------
+ * Specialized Wedding Components & Helpers
+ * -------------------------------------------------------------------
+ */
+
+/* Metallic Gold Text Gradient */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #eed8a1 0%, #d4af67 50%, #b08432 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
+/* Deep Emerald Vignette Background */
+.bg-wedding-teal {
+  background: radial-gradient(circle at center, #07473e 0%, #063a33 50%, #021a16 100%);
 }
 
-code,
-.counter {
-  font-family: var(--mono);
+/* Card Parchment Texture / Warm Ivory Background */
+.bg-wedding-ivory {
+  background-color: #faf6ee;
+  background-image: radial-gradient(rgba(212, 175, 103, 0.08) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* The Signature Wedding Arch Invitation Card */
+.wedding-arch-card {
+  border-top-left-radius: 160px;
+  border-top-right-radius: 160px;
+  border-bottom-left-radius: 28px;
+  border-bottom-right-radius: 28px;
+  position: relative;
+  background-color: #faf6ee;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(212, 175, 103, 0.35);
+}
+
+/* Double Golden Border on Arch (Just like the Invitation Card) */
+.wedding-arch-card::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-top-left-radius: 150px;
+  border-top-right-radius: 150px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border: 1.5px solid #d4af67;
+  pointer-events: none;
+}
+
+/* Outer Accent Gold Stroke */
+.wedding-arch-card::after {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border-top-left-radius: 146px;
+  border-top-right-radius: 146px;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  border: 0.75px solid rgba(212, 175, 103, 0.45);
+  pointer-events: none;
+}
+
+/* Ornate Wedding Divider with Center Diamond */
+.wedding-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1.5rem auto;
+  width: 100%;
+  max-width: 320px;
+}
+
+.wedding-divider::before,
+.wedding-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #d4af67, transparent);
+}
+
+.wedding-divider-diamond {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #d4af67;
+  transform: rotate(45deg);
+  border: 1px solid #b08432;
+}
+
+/* Calligraphic Couple Names */
+.couples-title {
+  font-family: var(--font-script);
+  line-height: 1.15;
+  color: var(--color-teal-deep);
+}
+
+/* Gold Pill Badge (e.g. for "21ST NOVEMBER", "1:00 PM PROMPT") */
+.wedding-pill-badge {
   display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px;
+  border: 1.5px solid #d4af67;
+  background-color: rgba(250, 246, 238, 0.9);
+  color: var(--color-teal-deep);
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  box-shadow: 0 2px 8px rgba(212, 175, 103, 0.15);
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* Monogram Circle Frame (O & T Logo) */
+.monogram-badge {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 1.5px solid #d4af67;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: radial-gradient(circle, #fcf9f2 60%, #f5eedc 100%);
+}
+
+.monogram-badge::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  border: 0.75px dashed rgba(212, 175, 103, 0.6);
+}
+
+/* Gold Foil Button */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, #eed8a1 0%, #d4af67 50%, #b08432 100%);
+  color: #063a33;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 15px rgba(212, 175, 103, 0.35);
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(212, 175, 103, 0.5);
+  background: linear-gradient(135deg, #fff2d1 0%, #dfb86c 50%, #bc923e 100%);
+}
+
+/* Teal Luxury Button */
+.btn-teal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 2rem;
+  background-color: #063a33;
+  color: #faf6ee;
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  border-radius: 9999px;
+  border: 1.5px solid #d4af67;
+  box-shadow: 0 4px 15px rgba(6, 58, 51, 0.3);
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.btn-teal:hover {
+  transform: translateY(-2px);
+  background-color: #09473e;
+  border-color: #f5e4bd;
+  box-shadow: 0 8px 25px rgba(6, 58, 51, 0.5);
 }
