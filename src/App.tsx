@@ -8,12 +8,49 @@ import {
 } from './assets/images'
 
 export default function App() {
+  const [currentPage, setCurrentPage] = useState<'home' | 'gifts'>(() => {
+    return typeof window !== 'undefined' && window.location.hash === '#gifts'
+      ? 'gifts'
+      : 'home'
+  })
   const [guestName, setGuestName] = useState('')
   const [attending, setAttending] = useState<'yes' | 'no'>('yes')
   const [guestCount, setGuestCount] = useState('1')
   const [message, setMessage] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null)
+  const [copiedAccount, setCopiedAccount] = useState(false)
+
+  // Listen to hash changes for page routing
+  useEffect(() => {
+    const handleHashChange = () => {
+      if (window.location.hash === '#gifts') {
+        setCurrentPage('gifts')
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else {
+        setCurrentPage('home')
+      }
+    }
+
+    window.addEventListener('hashchange', handleHashChange)
+    return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [])
+
+  const copyAccountNumber = () => {
+    navigator.clipboard?.writeText('0774559702')
+    setCopiedAccount(true)
+    setTimeout(() => setCopiedAccount(false), 2500)
+  }
+
+  const navigateTo = (page: 'home' | 'gifts') => {
+    if (page === 'gifts') {
+      window.location.hash = 'gifts'
+    } else {
+      window.location.hash = ''
+    }
+    setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   // Countdown timer to November 21st
   const [timeLeft, setTimeLeft] = useState({
@@ -59,7 +96,10 @@ export default function App() {
       {/* Floating Monogram Navigation */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-teal-deep/85 backdrop-blur-md border-b border-champagne/20 transition-all duration-300">
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-          <a href="#" className="flex items-center gap-3 group">
+          <button
+            onClick={() => navigateTo('home')}
+            className="flex items-center gap-3 group text-left cursor-pointer"
+          >
             <img
               src="/favicon.svg"
               alt="O◈T Monogram"
@@ -73,31 +113,231 @@ export default function App() {
                 21st November &bull; Lagos
               </span>
             </div>
-          </a>
+          </button>
 
-          <nav className="hidden md:flex items-center gap-8 text-xs font-sans tracking-widest uppercase text-ivory/80">
-            <a href="#our-story" className="hover:text-champagne transition-colors">Our Story</a>
-            <a href="#groom-letter" className="hover:text-champagne transition-colors">Groom's Letter</a>
-            <a href="#ceremony" className="hover:text-champagne transition-colors">Ceremony</a>
-            <a href="#gallery" className="hover:text-champagne transition-colors">Moments</a>
-            <a
-              href="#rsvp"
-              className="px-5 py-2 rounded-full border border-champagne bg-champagne/10 text-champagne hover:bg-champagne hover:text-teal-deep transition-all duration-300 font-semibold shadow-gold-sm"
-            >
-              RSVP
-            </a>
+          <nav className="hidden md:flex items-center gap-7 text-xs font-sans tracking-widest uppercase text-ivory/80">
+            {currentPage === 'home' ? (
+              <>
+                <a href="#our-story" className="hover:text-champagne transition-colors">Our Story</a>
+                <a href="#groom-letter" className="hover:text-champagne transition-colors">Groom's Letter</a>
+                <a href="#ceremony" className="hover:text-champagne transition-colors">Ceremony</a>
+                <a href="#gallery" className="hover:text-champagne transition-colors">Moments</a>
+                <a href="#rsvp" className="hover:text-champagne transition-colors">RSVP</a>
+                <button
+                  onClick={() => navigateTo('gifts')}
+                  className="px-4 py-2 rounded-full border border-champagne bg-champagne/15 text-champagne hover:bg-champagne hover:text-teal-deep transition-all duration-300 font-semibold shadow-gold-sm cursor-pointer"
+                >
+                  Cash Gifts
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => navigateTo('home')}
+                  className="hover:text-champagne transition-colors cursor-pointer"
+                >
+                  &larr; Back to Home
+                </button>
+                <span className="text-champagne font-semibold border-b border-champagne pb-0.5">
+                  Cash Gifts
+                </span>
+                <button
+                  onClick={() => {
+                    navigateTo('home')
+                    setTimeout(() => {
+                      document.getElementById('rsvp')?.scrollIntoView({ behavior: 'smooth' })
+                    }, 100)
+                  }}
+                  className="px-4 py-2 rounded-full border border-champagne bg-champagne/15 text-champagne hover:bg-champagne hover:text-teal-deep transition-all duration-300 font-semibold shadow-gold-sm cursor-pointer"
+                >
+                  RSVP
+                </button>
+              </>
+            )}
           </nav>
 
-          <a
-            href="#rsvp"
-            className="md:hidden px-4 py-1.5 rounded-full border border-champagne text-xs font-sans uppercase tracking-widest text-champagne"
-          >
-            RSVP
-          </a>
+          <div className="md:hidden flex items-center gap-2">
+            <button
+              onClick={() => navigateTo(currentPage === 'gifts' ? 'home' : 'gifts')}
+              className="px-3 py-1.5 rounded-full border border-champagne text-[11px] font-sans uppercase tracking-widest text-champagne"
+            >
+              {currentPage === 'gifts' ? 'Home' : 'Cash Gifts'}
+            </button>
+          </div>
         </div>
       </header>
 
-      {/* ======================= HERO SECTION ======================= */}
+      {/* ======================= MAIN CONTENT / PAGE ROUTER ======================= */}
+      {currentPage === 'gifts' ? (
+        /* ======================= DEDICATED MONETARY GIFT PAGE ======================= */
+        <section className="pt-32 pb-24 min-h-[85vh] relative overflow-hidden bg-wedding-teal">
+          {/* Ambient Glows */}
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-150 h-150 bg-champagne/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+          <div className="absolute top-1/2 right-1/4 w-100 h-100 bg-teal-emerald/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+          <div className="max-w-4xl mx-auto px-6 relative space-y-12">
+            {/* Top Navigation Back button */}
+            <div className="flex items-center justify-between">
+              <button
+                onClick={() => navigateTo('home')}
+                className="inline-flex items-center gap-2 text-xs font-sans uppercase tracking-widest text-champagne hover:text-champagne-light transition-colors cursor-pointer group"
+              >
+                <span className="transition-transform duration-300 group-hover:-translate-x-1">&larr;</span>
+                <span>Return to Wedding Homepage</span>
+              </button>
+              <div className="wedding-pill-badge text-[11px] py-1 px-3">
+                <span>◈ Wedding Registry ◈</span>
+              </div>
+            </div>
+
+            {/* Header Titles */}
+            <div className="text-center space-y-4 max-w-2xl mx-auto">
+              <h1 className="font-script text-5xl sm:text-6xl md:text-7xl text-ivory">
+                Monetary Gifts &amp; Blessings
+              </h1>
+              <div className="wedding-divider">
+                <div className="wedding-divider-diamond"></div>
+              </div>
+              <p className="font-serif italic text-xl sm:text-2xl text-champagne font-normal">
+                "Thank you for coming to our wedding. We appreciate you."
+              </p>
+            </div>
+
+            {/* Main Bank Account Parchment Card */}
+            <div className="p-8 sm:p-14 rounded-3xl bg-ivory text-teal-deep shadow-2xl border-2 border-champagne relative">
+              {/* Monogram Seal */}
+              <div className="absolute -top-7 right-8 sm:right-14">
+                <div className="w-14 h-14 rounded-full bg-teal-forest border-2 border-champagne shadow-lg flex items-center justify-center">
+                  <img src="/favicon.svg" alt="O◈T Logo" className="w-12 h-12 rounded-full" />
+                </div>
+              </div>
+
+              <div className="space-y-8">
+                {/* Gracious Message requested by couple */}
+                <div className="space-y-3 font-serif text-base sm:text-lg text-teal-900/90 leading-relaxed">
+                  <p>
+                    Your presence, prayers, and celebratory joy as we unite as husband and wife mean everything to us.
+                  </p>
+                  <p className="font-semibold text-teal-deep text-lg">
+                    For cash gifts kindly send to this account:
+                  </p>
+                </div>
+
+                {/* The Luxury Bank Card */}
+                <div className="relative rounded-2xl bg-gradient-to-br from-teal-deep via-teal-forest to-[#021815] text-ivory p-6 sm:p-8 border border-champagne/40 shadow-xl overflow-hidden">
+                  {/* Subtle Background Rings */}
+                  <div className="absolute -right-10 -bottom-10 w-48 h-48 rounded-full border border-champagne/10 pointer-events-none"></div>
+                  <div className="absolute -right-20 -bottom-20 w-72 h-72 rounded-full border border-champagne/10 pointer-events-none"></div>
+
+                  <div className="relative space-y-6">
+                    {/* Bank Header */}
+                    <div className="flex items-center justify-between border-b border-champagne/20 pb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-champagne/20 border border-champagne/50 flex items-center justify-center text-champagne font-display font-bold text-xs">
+                          BANK
+                        </div>
+                        <div>
+                          <span className="font-display font-bold text-lg sm:text-xl text-ivory tracking-wide block">
+                            Access Bank
+                          </span>
+                          <span className="font-sans text-[10px] tracking-widest uppercase text-champagne block">
+                            Direct Bank Transfer &bull; Nigeria
+                          </span>
+                        </div>
+                      </div>
+                      <span className="px-3 py-1 rounded-full bg-champagne/15 border border-champagne/30 text-champagne text-[11px] font-mono font-bold">
+                        NGN
+                      </span>
+                    </div>
+
+                    {/* Account Number Box */}
+                    <div className="space-y-2">
+                      <span className="text-[11px] font-sans tracking-widest uppercase text-ivory/60 block">
+                        Account Number
+                      </span>
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-teal-forest/80 border border-champagne/30">
+                        <span className="font-mono text-2xl sm:text-3xl font-bold tracking-widest text-champagne-light select-all">
+                          0774559702
+                        </span>
+                        <button
+                          type="button"
+                          onClick={copyAccountNumber}
+                          className="btn-gold text-xs py-2.5 px-5 flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                          </svg>
+                          <span>{copiedAccount ? 'Copied to Clipboard! ✓' : 'Copy Account Number'}</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Account Name */}
+                    <div className="space-y-1">
+                      <span className="text-[11px] font-sans tracking-widest uppercase text-ivory/60 block">
+                        Account Name
+                      </span>
+                      <div className="font-serif text-lg sm:text-xl font-bold text-ivory tracking-wide">
+                        Oluwatobi Fasedemi
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Copied Toast Notification */}
+                {copiedAccount && (
+                  <div className="p-3.5 rounded-xl bg-teal-50 border border-teal-300 text-teal-deep text-xs font-sans text-center font-semibold flex items-center justify-center gap-2">
+                    <svg className="w-4 h-4 text-teal-deep" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Account Number 0774559702 copied successfully! You can paste it in your banking app.</span>
+                  </div>
+                )}
+
+                {/* Heartfelt Note from the Couple */}
+                <div className="pt-6 border-t border-champagne/30 flex flex-col sm:flex-row items-center gap-6">
+                  <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-champagne shadow-md shrink-0">
+                    <img src={WeddingIMG1} alt="Tobi &amp; Tope" className="w-full h-full object-cover" />
+                  </div>
+                  <div className="text-center sm:text-left space-y-1">
+                    <p className="font-serif italic text-base text-teal-muted">
+                      "May God bless you richly for every prayer, hug, and blessing you pour into our new beginning."
+                    </p>
+                    <span className="font-script text-2xl text-teal-deep block">
+                      Oluwatobi &amp; Temitope
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+              <button
+                type="button"
+                onClick={() => navigateTo('home')}
+                className="btn-teal w-full sm:w-auto text-center cursor-pointer"
+              >
+                &larr; Back to Wedding Ceremony
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  navigateTo('home')
+                  setTimeout(() => {
+                    document.getElementById('rsvp')?.scrollIntoView({ behavior: 'smooth' })
+                  }, 100)
+                }}
+                className="btn-gold w-full sm:w-auto text-center cursor-pointer"
+              >
+                Confirm Attendance / RSVP
+              </button>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <>
+          {/* ======================= HERO SECTION ======================= */}
       <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
         {/* Ambient Glows */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-150 h-150 bg-teal-emerald/40 rounded-full blur-3xl pointer-events-none -z-10"></div>
@@ -754,8 +994,32 @@ export default function App() {
               </form>
             )}
           </div>
+
+          {/* Cash Gifts Callout Banner on Home Page */}
+          <div className="mt-16 p-8 rounded-3xl bg-teal-deep/80 border border-champagne/40 shadow-card text-center max-w-xl mx-auto space-y-4">
+            <div className="wedding-pill-badge text-[11px] py-1 px-3">
+              <span>◈ Wedding Registry ◈</span>
+            </div>
+            <h3 className="font-display text-2xl text-ivory">
+              Sending a Cash Gift?
+            </h3>
+            <p className="font-serif italic text-base text-ivory/80 max-w-md mx-auto">
+              "Thank you for coming to our wedding. We appreciate you."
+            </p>
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => navigateTo('gifts')}
+                className="btn-gold text-xs cursor-pointer"
+              >
+                View Account Details for Cash Gifts &rarr;
+              </button>
+            </div>
+          </div>
         </div>
       </section>
+        </>
+      )}
 
       {/* ======================= LIGHTBOX MODAL ======================= */}
       {selectedPhoto && (
