@@ -510,15 +510,15 @@ export default function HomePage() {
                 </p>
                 <div className="flex items-center gap-4 pt-2">
                   <div className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-teal-deep border-2 border-champagne"></span>
+                    <span className="w-5 h-5 rounded-full bg-teal-deep border-2 border-champagne-light"></span>
                     <span className="text-xs font-sans text-ivory/70">Rich Teal</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-ivory border-2 border-champagne"></span>
+                    <span className="w-5 h-5 rounded-full bg-ivory border-2 border-champagne-light"></span>
                     <span className="text-xs font-sans text-ivory/70">Warm Ivory</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-champagne border-2 border-champagne-light"></span>
+                    <span className="w-5 h-5 rounded-full bg-champagne-gold border-2 border-champagne-light"></span>
                     <span className="text-xs font-sans text-ivory/70">Champagne Gold</span>
                   </div>
                 </div>
