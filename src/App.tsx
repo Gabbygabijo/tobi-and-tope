@@ -9,11 +9,25 @@ import {
 } from './assets/images'
 import { sendRSVPEmail } from './services/emailjs'
 
+const isGiftsUrl = (): boolean => {
+  if (typeof window === 'undefined') return false
+  const hash = (window.location.hash || '').toLowerCase()
+  const pathname = (window.location.pathname || '').toLowerCase()
+  const search = (window.location.search || '').toLowerCase()
+
+  return (
+    hash.includes('gift') ||
+    hash.includes('registry') ||
+    pathname.includes('gift') ||
+    pathname.includes('registry') ||
+    search.includes('gift') ||
+    search.includes('registry')
+  )
+}
+
 export default function App() {
   const [currentPage, setCurrentPage] = useState<'home' | 'gifts'>(() => {
-    return typeof window !== 'undefined' && window.location.hash === '#gifts'
-      ? 'gifts'
-      : 'home'
+    return isGiftsUrl() ? 'gifts' : 'home'
   })
   const [guestName, setGuestName] = useState('')
   const [attending, setAttending] = useState<'yes' | 'no'>('yes')
@@ -24,11 +38,12 @@ export default function App() {
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null)
   const [copiedType, setCopiedType] = useState<'account' | 'full' | null>(null)
+  const [showScrollTop, setShowScrollTop] = useState(false)
 
-  // Listen to hash changes for page routing
+  // Listen to hash and popstate changes for page routing
   useEffect(() => {
-    const handleHashChange = () => {
-      if (window.location.hash === '#gifts') {
+    const handleRouteChange = () => {
+      if (isGiftsUrl()) {
         setCurrentPage('gifts')
         window.scrollTo({ top: 0, behavior: 'smooth' })
       } else {
@@ -36,9 +51,27 @@ export default function App() {
       }
     }
 
-    window.addEventListener('hashchange', handleHashChange)
-    return () => window.removeEventListener('hashchange', handleHashChange)
+    window.addEventListener('hashchange', handleRouteChange)
+    window.addEventListener('popstate', handleRouteChange)
+    return () => {
+      window.removeEventListener('hashchange', handleRouteChange)
+      window.removeEventListener('popstate', handleRouteChange)
+    }
   }, [])
+
+  // Show scroll-to-top button after scrolling past hero
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   const copyAccountNumber = () => {
     navigator.clipboard?.writeText('0774559702')
@@ -58,6 +91,9 @@ export default function App() {
       window.location.hash = 'gifts'
     } else {
       window.location.hash = ''
+      if (window.location.pathname.toLowerCase().includes('gift')) {
+        window.history.pushState(null, '', '/')
+      }
     }
     setCurrentPage(page)
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -1224,6 +1260,39 @@ export default function App() {
               />
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ======================= SCROLL TO TOP BUTTON ======================= */}
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            type="button"
+            onClick={scrollToTop}
+            initial={{ opacity: 0, scale: 0.6, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.6, y: 15 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+            aria-label="Scroll to top of page"
+            title="Scroll to top"
+            className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-teal-deep/90 hover:bg-champagne text-champagne hover:text-teal-deep border border-champagne/40 hover:border-champagne shadow-gold-md backdrop-blur-md flex items-center justify-center transition-colors cursor-pointer group"
+          >
+            <svg
+              className="w-5 h-5 transition-transform duration-300 group-hover:-translate-y-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2.5"
+                d="M5 15l7-7 7 7"
+              />
+            </svg>
+          </motion.button>
         )}
       </AnimatePresence>
 
