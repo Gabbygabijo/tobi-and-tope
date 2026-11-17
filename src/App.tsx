@@ -1182,8 +1182,30 @@ export default function App() {
         <p className="text-xs font-serif text-ivory/50">
           Traditional Wedding Ceremony &bull; November 21st &bull; Lagos, Nigeria
         </p>
-        <div className="pt-4 border-t border-champagne/10 text-[11px] font-sans text-ivory/40">
-          Created with Love for Oluwatobi Deborah &amp; Temitope Emmanuel &bull; &copy; 2026
+        <div className="pt-4 border-t border-champagne/10 text-[11px] font-sans text-ivory/40 space-y-1.5">
+          <p>
+            Created with Love for Oluwatobi Deborah &amp; Temitope Emmanuel &bull; &copy; 2026
+          </p>
+          <p className="text-[10px] text-ivory/25 tracking-wide">
+            Powered by{' '}
+            <a
+              href="https://socialbusinessassistant.gabbyintelligence.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-ivory/30 hover:text-champagne/70 transition-colors underline-offset-2 hover:underline"
+            >
+              GabbyIntelligence
+            </a>
+            <span className="mx-1.5 text-ivory/20">&bull;</span>
+            <a
+              href="https://www.instagram.com/gabbyintelligence/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-ivory/30 hover:text-champagne/70 transition-colors underline-offset-2 hover:underline"
+            >
+              Instagram
+            </a>
+          </p>
         </div>
       </footer>
     </div>
