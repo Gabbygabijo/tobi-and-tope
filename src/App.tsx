@@ -7,6 +7,7 @@ import {
   WeddingIMG3,
   PictureWedding,
 } from './assets/images'
+import { sendRSVPEmail } from './services/emailjs'
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<'home' | 'gifts'>(() => {
@@ -19,6 +20,8 @@ export default function App() {
   const [guestCount, setGuestCount] = useState('1')
   const [message, setMessage] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null)
   const [copiedType, setCopiedType] = useState<'account' | 'full' | null>(null)
 
@@ -93,10 +96,31 @@ export default function App() {
     return () => clearInterval(interval)
   }, [])
 
-  const handleSubmitRSVP = (e: React.FormEvent) => {
+  const handleSubmitRSVP = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!guestName.trim()) return
-    setSubmitted(true)
+    if (!guestName.trim() || isSubmitting) return
+
+    setIsSubmitting(true)
+    setSubmitError(null)
+
+    try {
+      await sendRSVPEmail({
+        guestName: guestName.trim(),
+        attending,
+        guestCount,
+        message,
+      })
+      setSubmitted(true)
+    } catch (err: unknown) {
+      console.error('Failed to submit RSVP:', err)
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : 'Unable to send your RSVP right now. Please try again or reach out to the couple directly.'
+      setSubmitError(errorMessage)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -984,6 +1008,7 @@ export default function App() {
                       setSubmitted(false)
                       setGuestName('')
                       setMessage('')
+                      setSubmitError(null)
                     }}
                     className="btn-teal text-xs"
                   >
@@ -1068,9 +1093,45 @@ export default function App() {
                   ></textarea>
                 </div>
 
+                {submitError && (
+                  <div className="p-3.5 rounded-xl bg-red-500/15 border border-red-500/40 text-red-700 text-xs font-sans text-center">
+                    {submitError}
+                  </div>
+                )}
+
                 <div className="pt-2">
-                  <button type="submit" className="btn-gold w-full text-center">
-                    Submit RSVP
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="btn-gold w-full text-center flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <svg
+                          className="animate-spin h-4 w-4 text-teal-deep"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        <span>Sending RSVP...</span>
+                      </>
+                    ) : (
+                      'Submit RSVP'
+                    )}
                   </button>
                 </div>
               </form>
