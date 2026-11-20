@@ -18,7 +18,7 @@ const SAMPLE_GUESTS = [
   // Bride's family
   { name: 'Carrena\'s Family', table: 'Table 07', role: 'Family of the Bride' },
   { name: 'Carrena\'s Family', table: 'Table 08', role: 'Family of the Bride' },
-  { name: 'Perfection', table: 'Table 09', role: 'Bride\'s Friends' },
+  { name: 'Brides Siblings friends', table: 'Table 09', role: 'Bride\'s Friends' },
 
   { name: 'Oladunni\'s Second generation', table: 'Table 10', role: 'Family of the Bride' },
 
@@ -35,9 +35,12 @@ const SAMPLE_GUESTS = [
   // Bride's mother
   { name: 'Jimoh\'s Family', table: 'Table 17', role: 'Family of the Bride' },
   { name: 'Salvation Army', table: 'Table 18', role: 'Family of the Bride' },
-  { name: 'Salvation Army', table: 'Table 19', role: 'Family of the Bride' },
-  { name: 'GG Girls', table: 'Table 20', role: 'Family of the Bride' },
+  { name: 'GG Girls', table: 'Table 19', role: 'Family of the Bride' },
 
+  { name: 'Grooms siblings family', table: 'Table 20', role: 'Grooms Family' },
+  
+  { name: 'Special Guest', table: 'Table 21', role: 'Family of the Bride' },
+  { name: 'Special Guest', table: 'Table 22', role: 'Family of the Bride' },
   { name: 'Special Guest', table: 'Table 21', role: 'Family of the Bride' },
   { name: 'Special Guest', table: 'Table 22', role: 'Family of the Bride' },
 ]
@@ -202,9 +205,23 @@ export default function TableCardPage() {
     }
   }
 
-  // Native Print
+  // Native Print with Guest Name as suggested PDF filename / print title
   const handlePrint = () => {
+    const originalTitle = document.title
+    const sanitizedName = guestName.trim().replace(/[^a-zA-Z0-9 ]/g, '').trim() || 'Guest'
+    document.title = sanitizedName
+
     window.print()
+
+    const handleAfterPrint = () => {
+      document.title = originalTitle
+      window.removeEventListener('afterprint', handleAfterPrint)
+    }
+    window.addEventListener('afterprint', handleAfterPrint)
+
+    setTimeout(() => {
+      document.title = originalTitle
+    }, 2000)
   }
 
   // Apply a sample guest preset
