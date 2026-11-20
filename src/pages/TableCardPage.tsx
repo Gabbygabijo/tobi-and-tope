@@ -28,13 +28,16 @@ const SAMPLE_GUESTS = [
   { name: 'Special Guest', table: 'Table 13', role: 'Grooms Family' },
   { name: 'Special Guest', table: 'Table 14', role: 'Grooms Family' },
   { name: 'Special Guest', table: 'Table 15', role: 'Grooms Family' },
-  { name: 'Special Guest', table: 'Table 16', role: 'Family of the Bride' },
+
+  // Bride's Father
+  { name: 'Mr Tee\'s Guests', table: 'Table 16', role: 'Family of the Bride' },
 
   // Bride's mother
   { name: 'Jimoh\'s Family', table: 'Table 17', role: 'Family of the Bride' },
   { name: 'Salvation Army', table: 'Table 18', role: 'Family of the Bride' },
   { name: 'Salvation Army', table: 'Table 19', role: 'Family of the Bride' },
   { name: 'GG Girls', table: 'Table 20', role: 'Family of the Bride' },
+
   { name: 'Special Guest', table: 'Table 21', role: 'Family of the Bride' },
   { name: 'Special Guest', table: 'Table 22', role: 'Family of the Bride' },
 ]
