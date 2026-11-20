@@ -37,12 +37,12 @@ const SAMPLE_GUESTS = [
   { name: 'Salvation Army', table: 'Table 18', role: 'Family of the Bride' },
   { name: 'GG Girls', table: 'Table 19', role: 'Family of the Bride' },
 
-  { name: 'Grooms siblings family', table: 'Table 20', role: 'Grooms Family' },
+  { name: 'Grooms Siblings Friend', table: 'Table 20', role: 'Grooms Family' },
   
   { name: 'Special Guest', table: 'Table 21', role: 'Family of the Bride' },
   { name: 'Special Guest', table: 'Table 22', role: 'Family of the Bride' },
-  { name: 'Special Guest', table: 'Table 21', role: 'Family of the Bride' },
-  { name: 'Special Guest', table: 'Table 22', role: 'Family of the Bride' },
+  { name: 'Special Guest', table: 'Table 23', role: 'Family of the Bride' },
+  { name: 'Special Guest', table: 'Table 24', role: 'Family of the Bride' },
 ]
 
 export default function TableCardPage() {
