@@ -10,19 +10,19 @@ const SAMPLE_GUESTS = [
   { name: 'Bride and Groom friends', table: 'Table 01', role: 'Friends of the Couple' },
   { name: 'Bride and Groom colleagues ', table: 'Table 02', role: "Friends of the Couple" },
   { name: 'Aso ebi ladies ', table: 'Table 03', role: "Friends of the Couple" },
-  { name: 'Groom’s men', table: 'High Table', role: 'Friends of the Couple' },
-  // { name: 'Mr. Babatunde & Friends', table: 'Table 05', role: 'Friends of the Couple' },
+  { name: 'Groom’s men', table: 'Table 04', role: 'Friends of the Couple' },
+  { name: 'Oladunni\'s Second generation', table: 'Table 10', role: 'Family of the Bride' },
 ]
 
 export default function TableCardPage() {
   // Dynamic form state
-  const [guestName, setGuestName] = useState('Chief & Mrs. O. Adeleke')
+  const [guestName, setGuestName] = useState(' Mr & Mrs. T. Fasedemi')
   const [tableNumber, setTableNumber] = useState('Table 01')
   const [guestRole, setGuestRole] = useState('Distinguished VIP Guest')
   const [welcomeNote, setWelcomeNote] = useState(
     'We are deeply honored by your presence. Thank you for blessing our union with your love & prayers.'
   )
-  const [theme, setTheme] = useState<'ivory' | 'teal'>('ivory')
+  const [theme, setTheme] = useState<'ivory' | 'teal'>('teal')
   const [invertTopPanel, setInvertTopPanel] = useState(true)
   const [previewMode, setPreviewMode] = useState<'flat' | 'tent3d'>('flat')
 
@@ -324,7 +324,7 @@ export default function TableCardPage() {
                 type="text"
                 value={guestName}
                 onChange={(e) => setGuestName(e.target.value)}
-                placeholder="e.g. Chief &amp; Mrs. O. Adeleke"
+                placeholder="e.g. Mr &amp; Mrs. T. Fasedemi"
                 className="w-full px-4 py-2.5 rounded-xl border border-champagne/50 bg-teal-forest/80 text-ivory placeholder:text-ivory/40 text-sm focus:outline-none focus:ring-2 focus:ring-champagne font-sans"
               />
             </div>
@@ -846,7 +846,7 @@ export default function TableCardPage() {
                 rows={6}
                 value={bulkText}
                 onChange={(e) => setBulkText(e.target.value)}
-                placeholder="Chief & Mrs. O. Adeleke&#10;Dr. & Dr. (Mrs.) Femi Fasedemi&#10;Hon. Samuel Adeleke&#10;Pastor & Mrs. Johnson"
+                placeholder="Mr &amp; Mrs. T. Fasedemi&#10;Dr. & Dr. (Mrs.) Femi Fasedemi&#10;Hon. Samuel Adeleke&#10;Pastor & Mrs. Johnson"
                 className="w-full px-4 py-3 rounded-xl border border-champagne/50 bg-teal-forest text-ivory text-xs font-sans focus:outline-none focus:ring-2 focus:ring-champagne"
               ></textarea>
 
