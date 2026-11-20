@@ -11,6 +11,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react'
 import HomePage from './pages/HomePage'
 import GiftsPage from './pages/GiftsPage'
+import TableCardPage from './pages/TableCardPage'
 
 /**
  * Automatically scrolls to top on route change.
@@ -40,6 +41,7 @@ function Layout() {
   const location = useLocation()
   const navigate = useNavigate()
   const isGifts = location.pathname.startsWith('/gifts')
+  const isTableCard = location.pathname.startsWith('/table-card')
   const [showScrollTop, setShowScrollTop] = useState(false)
 
   // Floating scroll-to-top threshold
@@ -57,7 +59,7 @@ function Layout() {
   }
 
   const handleNavToRSVP = () => {
-    if (isGifts) {
+    if (isGifts || isTableCard) {
       navigate('/')
       setTimeout(() => {
         document.getElementById('rsvp')?.scrollIntoView({ behavior: 'smooth' })
@@ -92,13 +94,31 @@ function Layout() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-7 text-xs font-sans tracking-widest uppercase text-ivory/80">
-            {!isGifts ? (
+            {!isGifts && !isTableCard ? (
               <>
                 <a href="#our-story" className="hover:text-champagne transition-colors">Our Story</a>
                 <a href="#groom-letter" className="hover:text-champagne transition-colors">Groom's Letter</a>
                 <a href="#ceremony" className="hover:text-champagne transition-colors">Ceremony</a>
                 <a href="#gallery" className="hover:text-champagne transition-colors">Moments</a>
                 <a href="#rsvp" className="hover:text-champagne transition-colors">RSVP</a>
+                <Link
+                  to="/gifts"
+                  className="px-4 py-2 rounded-full border border-champagne bg-champagne/15 text-champagne hover:bg-champagne hover:text-teal-deep transition-all duration-300 font-semibold shadow-gold-sm cursor-pointer"
+                >
+                  Cash Gifts
+                </Link>
+              </>
+            ) : isTableCard ? (
+              <>
+                <Link
+                  to="/"
+                  className="hover:text-champagne transition-colors cursor-pointer"
+                >
+                  &larr; Back to Home
+                </Link>
+                <span className="text-champagne font-semibold border-b border-champagne pb-0.5">
+                  Table Cards
+                </span>
                 <Link
                   to="/gifts"
                   className="px-4 py-2 rounded-full border border-champagne bg-champagne/15 text-champagne hover:bg-champagne hover:text-teal-deep transition-all duration-300 font-semibold shadow-gold-sm cursor-pointer"
@@ -129,7 +149,7 @@ function Layout() {
           </nav>
 
           <div className="md:hidden flex items-center gap-2">
-            {!isGifts ? (
+            {!isGifts && !isTableCard ? (
               <Link
                 to="/gifts"
                 className="px-3 py-1.5 rounded-full border border-champagne text-[11px] font-sans uppercase tracking-widest text-champagne"
@@ -155,6 +175,8 @@ function Layout() {
           <Route path="/gifts" element={<GiftsPage />} />
           <Route path="/gift" element={<Navigate to="/gifts" replace />} />
           <Route path="/registry" element={<Navigate to="/gifts" replace />} />
+          <Route path="/table-card" element={<TableCardPage />} />
+          <Route path="/table-cards" element={<Navigate to="/table-card" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
@@ -231,6 +253,13 @@ function Layout() {
             >
               Instagram
             </a>
+            <span className="mx-1.5 text-ivory/20">&bull;</span>
+            <Link
+              to="/table-card"
+              className="text-ivory/30 hover:text-champagne/70 transition-colors underline-offset-2 hover:underline"
+            >
+              Table Cards
+            </Link>
           </p>
         </div>
       </footer>
