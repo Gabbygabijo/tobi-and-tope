@@ -7,11 +7,36 @@ import { jsPDF } from 'jspdf'
 import bsaLogo from '../assets/BSATransparentLogo.png'
 
 const SAMPLE_GUESTS = [
+  // Bride and groom's friends
   { name: 'Bride and Groom friends', table: 'Table 01', role: 'Friends of the Couple' },
-  { name: 'Bride and Groom colleagues ', table: 'Table 02', role: "Friends of the Couple" },
-  { name: 'Aso ebi ladies ', table: 'Table 03', role: "Friends of the Couple" },
-  { name: 'Groom’s men', table: 'Table 04', role: 'Friends of the Couple' },
+  { name: 'Bride and Groom friends', table: 'Table 02', role: 'Friends of the Couple' },
+  { name: 'Bride and Groom colleagues ', table: 'Table 03', role: "Friends of the Couple" },
+  { name: 'Bride and Groom colleagues ', table: 'Table 04', role: "Friends of the Couple" },
+  { name: 'Aso ebi ladies ', table: 'Table 05', role: "Friends of the Couple" },
+  { name: 'Groom’s men', table: 'Table 06', role: 'Friends of the Couple' },
+
+  // Bride's family
+  { name: 'Carrena\'s Family', table: 'Table 07', role: 'Family of the Bride' },
+  { name: 'Carrena\'s Family', table: 'Table 08', role: 'Family of the Bride' },
+  { name: 'Perfection', table: 'Table 09', role: 'Bride\'s Friends' },
+
   { name: 'Oladunni\'s Second generation', table: 'Table 10', role: 'Family of the Bride' },
+
+  // Grooms family
+  { name: 'Grooms Father\'s friend', table: 'Table 11', role: 'Grooms Family' },
+  { name: 'Grooms Mother\'s friend', table: 'Table 12', role: 'Grooms Family' },
+  { name: 'Special Guest', table: 'Table 13', role: 'Grooms Family' },
+  { name: 'Special Guest', table: 'Table 14', role: 'Grooms Family' },
+  { name: 'Special Guest', table: 'Table 15', role: 'Grooms Family' },
+  { name: 'Special Guest', table: 'Table 16', role: 'Family of the Bride' },
+
+  // Bride's mother
+  { name: 'Jimoh\'s Family', table: 'Table 17', role: 'Family of the Bride' },
+  { name: 'Salvation Army', table: 'Table 18', role: 'Family of the Bride' },
+  { name: 'Salvation Army', table: 'Table 19', role: 'Family of the Bride' },
+  { name: 'GG Girls', table: 'Table 20', role: 'Family of the Bride' },
+  { name: 'Special Guest', table: 'Table 21', role: 'Family of the Bride' },
+  { name: 'Special Guest', table: 'Table 22', role: 'Family of the Bride' },
 ]
 
 export default function TableCardPage() {
@@ -114,11 +139,10 @@ export default function TableCardPage() {
       })
 
       const dataUrl = canvas.toDataURL('image/png')
-      const sanitizedName = guestName.trim().replace(/[^a-zA-Z0-9]/g, '_') || 'Guest'
-      const sanitizedTable = tableNumber.trim().replace(/[^a-zA-Z0-9]/g, '_') || 'Table'
+      const sanitizedName = guestName.trim().replace(/[^a-zA-Z0-9 ]/g, '').trim() || 'Guest'
 
       const link = document.createElement('a')
-      link.download = `A5-TableCard-${sanitizedName}-${sanitizedTable}.png`
+      link.download = `${sanitizedName}.png`
       link.href = dataUrl
       link.click()
 
@@ -160,10 +184,9 @@ export default function TableCardPage() {
       const imgData = canvas.toDataURL('image/png')
       pdf.addImage(imgData, 'PNG', 0, 0, 148, 210, undefined, 'FAST')
 
-      const sanitizedName = guestName.trim().replace(/[^a-zA-Z0-9]/g, '_') || 'Guest'
-      const sanitizedTable = tableNumber.trim().replace(/[^a-zA-Z0-9]/g, '_') || 'Table'
+      const sanitizedName = guestName.trim().replace(/[^a-zA-Z0-9 ]/g, '').trim() || 'Guest'
 
-      pdf.save(`A5-TableCard-${sanitizedName}-${sanitizedTable}.pdf`)
+      pdf.save(`${sanitizedName}.pdf`)
 
       setStatusMessage('A5 PDF downloaded successfully! ✓')
       setTimeout(() => setStatusMessage(null), 3500)
@@ -416,11 +439,10 @@ export default function TableCardPage() {
                 <button
                   type="button"
                   onClick={() => setTheme('ivory')}
-                  className={`py-3 px-3 rounded-xl border text-xs font-sans font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${
-                    theme === 'ivory'
+                  className={`py-3 px-3 rounded-xl border text-xs font-sans font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${theme === 'ivory'
                       ? 'bg-ivory text-teal-deep border-champagne shadow-md'
                       : 'bg-teal-forest/60 text-ivory/70 border-champagne/30 hover:border-champagne'
-                  }`}
+                    }`}
                 >
                   <span className="w-3.5 h-3.5 rounded-full bg-ivory border border-champagne"></span>
                   <span>Royal Ivory (Recommended)</span>
@@ -429,11 +451,10 @@ export default function TableCardPage() {
                 <button
                   type="button"
                   onClick={() => setTheme('teal')}
-                  className={`py-3 px-3 rounded-xl border text-xs font-sans font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${
-                    theme === 'teal'
+                  className={`py-3 px-3 rounded-xl border text-xs font-sans font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${theme === 'teal'
                       ? 'bg-teal-forest text-champagne border-champagne shadow-md'
                       : 'bg-teal-forest/60 text-ivory/70 border-champagne/30 hover:border-champagne'
-                  }`}
+                    }`}
                 >
                   <span className="w-3.5 h-3.5 rounded-full bg-teal-deep border border-champagne"></span>
                   <span>Deep Forest Teal</span>
@@ -475,22 +496,20 @@ export default function TableCardPage() {
                 <button
                   type="button"
                   onClick={() => setPreviewMode('flat')}
-                  className={`py-2 px-3 rounded-xl border text-xs font-sans font-semibold transition-all cursor-pointer ${
-                    previewMode === 'flat'
+                  className={`py-2 px-3 rounded-xl border text-xs font-sans font-semibold transition-all cursor-pointer ${previewMode === 'flat'
                       ? 'bg-champagne text-teal-deep border-champagne font-bold'
                       : 'bg-teal-forest/60 text-ivory/70 border-champagne/30'
-                  }`}
+                    }`}
                 >
                   Flat A5 Sheet (Print View)
                 </button>
                 <button
                   type="button"
                   onClick={() => setPreviewMode('tent3d')}
-                  className={`py-2 px-3 rounded-xl border text-xs font-sans font-semibold transition-all cursor-pointer ${
-                    previewMode === 'tent3d'
+                  className={`py-2 px-3 rounded-xl border text-xs font-sans font-semibold transition-all cursor-pointer ${previewMode === 'tent3d'
                       ? 'bg-champagne text-teal-deep border-champagne font-bold'
                       : 'bg-teal-forest/60 text-ivory/70 border-champagne/30'
-                  }`}
+                    }`}
                 >
                   3D Tent Fold (Table View)
                 </button>
