@@ -8,10 +8,10 @@ import bsaLogo from '../assets/BSATransparentLogo.png'
 
 const SAMPLE_GUESTS = [
   { name: 'Bride and Groom friends', table: 'Table 01', role: 'Friends of the Couple' },
-  { name: 'Bride and Groom colleagues ', table: 'Table 02', role: "Groom's Family" },
-  { name: 'Aso ebi ladies ', table: 'Table 03', role: "Bride's Family" },
-  { name: 'Groom’s men', table: 'High Table', role: 'Special Guest of Honor' },
-  { name: 'Mr. Babatunde & Friends', table: 'Table 05', role: 'Friends of the Couple' },
+  { name: 'Bride and Groom colleagues ', table: 'Table 02', role: "Friends of the Couple" },
+  { name: 'Aso ebi ladies ', table: 'Table 03', role: "Friends of the Couple" },
+  { name: 'Groom’s men', table: 'High Table', role: 'Friends of the Couple' },
+  // { name: 'Mr. Babatunde & Friends', table: 'Table 05', role: 'Friends of the Couple' },
 ]
 
 export default function TableCardPage() {
@@ -25,7 +25,7 @@ export default function TableCardPage() {
   const [theme, setTheme] = useState<'ivory' | 'teal'>('ivory')
   const [invertTopPanel, setInvertTopPanel] = useState(true)
   const [previewMode, setPreviewMode] = useState<'flat' | 'tent3d'>('flat')
-  const [showBankDetails, setShowBankDetails] = useState(true)
+
   const [isExporting, setIsExporting] = useState<'png' | 'pdf' | null>(null)
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
 
@@ -202,14 +202,6 @@ export default function TableCardPage() {
     }
   }
 
-  // Calculate dynamic text size for guest name based on length
-  const getGuestNameFontSizeClass = (name: string) => {
-    const len = name.length
-    if (len > 35) return 'text-base sm:text-lg leading-tight'
-    if (len > 25) return 'text-lg sm:text-xl leading-tight'
-    if (len > 18) return 'text-xl sm:text-2xl leading-tight'
-    return 'text-2xl sm:text-3xl leading-snug'
-  }
 
   return (
     <div className="pt-24 sm:pt-28 pb-20 min-h-screen bg-teal-forest text-ivory">
@@ -471,22 +463,7 @@ export default function TableCardPage() {
                 </div>
               </label>
 
-              <label className="flex items-start gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={showBankDetails}
-                  onChange={(e) => setShowBankDetails(e.target.checked)}
-                  className="mt-0.5 w-4 h-4 rounded text-champagne accent-[#D4AF67] cursor-pointer"
-                />
-                <div>
-                  <span className="text-xs font-sans font-semibold text-ivory block">
-                    Show Access Bank Details Under Gift QR
-                  </span>
-                  <span className="text-[11px] font-serif italic text-ivory/60 block mt-0.5">
-                    Displays account number (0774559702) in clear print next to the QR code.
-                  </span>
-                </div>
-              </label>
+
             </div>
 
             {/* Preview Mode Selector */}
@@ -584,6 +561,7 @@ export default function TableCardPage() {
           )}
 
           {/* ==================== FLAT PRINT-READY A5 SHEET ==================== */}
+          {/* Always mounted; hidden off-screen when in 3D mode so cardRef is always valid */}
           <div
             className={
               previewMode === 'tent3d'
@@ -591,248 +569,244 @@ export default function TableCardPage() {
                 : 'w-full flex justify-center overflow-x-auto p-2'
             }
           >
+            <div
+              ref={cardRef}
+              id="printable-table-card"
+              style={{
+                position: 'relative',
+                width: '148mm',
+                height: '210mm',
+                maxWidth: '100%',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                boxSizing: 'border-box',
+                backgroundColor: theme === 'ivory' ? '#FAF6EE' : '#03241F',
+                color: theme === 'ivory' ? '#063A33' : '#FAF6EE',
+                fontFamily: 'sans-serif',
+              }}
+            >
+              {/* Outer Gold Border */}
               <div
-                ref={cardRef}
-                id="printable-table-card"
-                className={`relative w-[148mm] h-[210mm] max-w-full shadow-2xl transition-all duration-300 select-none overflow-hidden flex flex-col justify-between ${
-                  theme === 'ivory'
-                    ? 'bg-[#FAF6EE] text-teal-deep'
-                    : 'bg-teal-forest text-[#FAF6EE]'
-                }`}
                 style={{
-                  boxSizing: 'border-box',
+                  position: 'absolute',
+                  inset: '8px',
+                  borderRadius: '16px',
+                  border: '2px solid #D4AF67',
+                  pointerEvents: 'none',
+                  zIndex: 10,
                 }}
               >
-                {/* Outer Delicate Gold Filigree Border */}
+                {/* Inner Accent Border */}
                 <div
-                  className={`absolute inset-2 sm:inset-3 rounded-2xl border-2 pointer-events-none z-10 ${
-                    theme === 'ivory' ? 'border-[#D4AF67]' : 'border-[#D4AF67]'
-                  }`}
-                >
-                  {/* Inner Fine Accent Border */}
-                  <div
-                    className={`absolute inset-1 rounded-xl border pointer-events-none ${
-                      theme === 'ivory' ? 'border-[#D4AF67]/40' : 'border-[#D4AF67]/30'
-                    }`}
-                  ></div>
+                  style={{
+                    position: 'absolute',
+                    inset: '4px',
+                    borderRadius: '12px',
+                    border: '1px solid rgba(212,175,103,0.4)',
+                    pointerEvents: 'none',
+                  }}
+                />
+              </div>
+
+              {/* ===================================================================
+               * PANEL 1 (TOP HALF - BACK DISPLAY / STANDING FACING OUTWARD)
+               * =================================================================== */}
+              <div
+                style={{
+                  position: 'relative',
+                  width: '100%',
+                  height: '105mm',
+                  padding: '20px 24px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  boxSizing: 'border-box',
+                  transform: invertTopPanel ? 'rotate(180deg)' : 'none',
+                  transition: 'transform 0.3s',
+                }}
+              >
+                {/* Top Crest & Header */}
+                <div style={{ textAlign: 'center', paddingTop: '4px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '4px' }}>
+                    <span style={{ height: '1px', width: '24px', backgroundColor: '#D4AF67', display: 'block' }} />
+                    <span style={{ fontFamily: 'sans-serif', fontSize: '9px', letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 700, color: '#D4AF67' }}>
+                      Celebrate · Bless · Connect
+                    </span>
+                    <span style={{ height: '1px', width: '24px', backgroundColor: '#D4AF67', display: 'block' }} />
+                  </div>
+                  <h4 style={{ fontFamily: 'Georgia, serif', fontSize: '24px', lineHeight: 1, margin: 0, color: theme === 'ivory' ? '#063A33' : '#FAF6EE' }}>
+                    Oluwatobi &amp; Temitope
+                  </h4>
                 </div>
 
-                {/* ===================================================================
-                 * PANEL 1 (TOP HALF - BACK DISPLAY / STANDING FACING OUTWARD)
-                 * Dimensions: 148mm x 105mm
-                 * When invertTopPanel is ON, rotate-180 so it stands right side up!
-                 * =================================================================== */}
-                <div
-                  className={`relative w-full h-[105mm] p-5 sm:p-6 flex flex-col justify-between transition-transform duration-300 ${
-                    invertTopPanel ? 'rotate-180' : ''
-                  }`}
-                >
-                  {/* Top Crest & Header */}
-                  <div className="text-center pt-1">
-                    <div className="flex items-center justify-center gap-2 mb-1">
-                      <span className="h-px w-6 bg-[#D4AF67]/60"></span>
-                      <span className="font-display text-[9px] sm:text-[10px] tracking-widest uppercase font-bold text-[#D4AF67]">
-                        Celebrate &bull; Bless &bull; Connect
-                      </span>
-                      <span className="h-px w-6 bg-[#D4AF67]/60"></span>
+                {/* Dual QR Codes */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', margin: 'auto 0', padding: '0 4px' }}>
+                  {/* QR 1 – Cash Gift */}
+                  <div style={{
+                    padding: '10px 12px',
+                    borderRadius: '12px',
+                    border: '1px solid rgba(212,175,103,0.4)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    justifyContent: 'space-between',
+                    backgroundColor: theme === 'ivory' ? '#FFFFFFE6' : '#063A33CC',
+                  }}>
+                    <span style={{ fontSize: '9px', fontFamily: 'sans-serif', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#D4AF67', marginBottom: '4px' }}>
+                      ◈ Send Cash Gift
+                    </span>
+                    <div style={{ width: '80px', height: '80px', padding: '4px', backgroundColor: '#FFFFFF', borderRadius: '8px', border: '1px solid rgba(212,175,103,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {qrGifts && <img src={qrGifts} alt="QR Cash Gift" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
                     </div>
-                    <h4
-                      className={`font-script text-2xl sm:text-3xl leading-none ${
-                        theme === 'ivory' ? 'text-teal-deep' : 'text-[#FAF6EE]'
-                      }`}
-                    >
-                      Oluwatobi &amp; Temitope
-                    </h4>
-                  </div>
-
-                  {/* Dual QR Codes Grid */}
-                  <div className="grid grid-cols-2 gap-3 sm:gap-4 my-auto px-1 sm:px-2">
-                    {/* QR Code 1: Monetary Gifts & Registry */}
-                    <div
-                      className={`p-2.5 sm:p-3 rounded-xl border flex flex-col items-center text-center justify-between ${
-                        theme === 'ivory'
-                          ? 'bg-white/90 border-[#D4AF67]/40 shadow-xs'
-                          : 'bg-teal-deep/80 border-[#D4AF67]/40'
-                      }`}
-                    >
-                      <span className="text-[9px] sm:text-[10px] font-sans font-bold uppercase tracking-wider text-[#D4AF67] mb-1">
-                        ◈ Send Cash Gift
-                      </span>
-
-                      {/* QR Box */}
-                      <div className="w-20 h-20 sm:w-22 sm:h-22 p-1 bg-white rounded-lg border border-[#D4AF67]/40 shadow-xs flex items-center justify-center">
-                        {qrGifts ? (
-                          <img src={qrGifts} alt="QR for Cash Gifts" className="w-full h-full object-contain" />
-                        ) : (
-                          <div className="w-full h-full bg-gray-200 animate-pulse rounded"></div>
-                        )}
-                      </div>
-
-                      {/* Bank Details */}
-                      {showBankDetails ? (
-                        <div className="mt-1 text-[8px] sm:text-[9px] font-sans leading-tight">
-                          <p className="font-bold text-teal-deep dark:text-[#D4AF67]">
-                            Access Bank &bull; 0774559702
-                          </p>
-                          <p className="text-gray-500 dark:text-gray-300 text-[7.5px]">
-                            Oluwatobi Fasedemi
-                          </p>
-                        </div>
-                      ) : (
-                        <p className="mt-1 text-[8px] font-serif italic text-gray-500">
-                          Scan to view registry
-                        </p>
-                      )}
-                    </div>
-
-                    {/* QR Code 2: Wedding Website */}
-                    <div
-                      className={`p-2.5 sm:p-3 rounded-xl border flex flex-col items-center text-center justify-between ${
-                        theme === 'ivory'
-                          ? 'bg-white/90 border-[#D4AF67]/40 shadow-xs'
-                          : 'bg-teal-deep/80 border-[#D4AF67]/40'
-                      }`}
-                    >
-                      <span className="text-[9px] sm:text-[10px] font-sans font-bold uppercase tracking-wider text-[#D4AF67] mb-1">
-                        ◈ Wedding Website
-                      </span>
-
-                      {/* QR Box */}
-                      <div className="w-20 h-20 sm:w-22 sm:h-22 p-1 bg-white rounded-lg border border-[#D4AF67]/40 shadow-xs flex items-center justify-center">
-                        {qrWebsite ? (
-                          <img src={qrWebsite} alt="QR for Wedding Website" className="w-full h-full object-contain" />
-                        ) : (
-                          <div className="w-full h-full bg-gray-200 animate-pulse rounded"></div>
-                        )}
-                      </div>
-
-                      <div className="mt-1 text-[8px] sm:text-[9px] font-sans leading-tight">
-                        <p className="font-bold text-teal-deep dark:text-[#D4AF67]">
-                          Our Story &amp; Gallery
-                        </p>
-                        <p className="text-gray-500 dark:text-gray-300 text-[7.5px]">
-                          t-w-t.gabbyintelligence.com
-                        </p>
-                      </div>
+                    <div style={{ marginTop: '4px', fontSize: '8px', fontFamily: 'sans-serif', lineHeight: 1.4 }}>
+                      <p style={{ fontWeight: 700, color: '#063A33', margin: 0 }}>Access Bank · 0774559702</p>
+                      <p style={{ color: '#6B7280', fontSize: '7.5px', margin: 0 }}>Oluwatobi Fasedemi</p>
                     </div>
                   </div>
 
-                  {/* GabbyIntelligence Advert / Awareness Section */}
-                  <div className="pt-2 border-t border-[#D4AF67]/20 flex items-center justify-between px-1">
-                    <div className="flex items-center gap-1.5">
-                      <img
-                        src={logoDataUrl || bsaLogo}
-                        alt="GabbyIntelligence"
-                        className="w-5 h-5 sm:w-6 sm:h-6 object-contain rounded"
-                      />
-                      <div className="text-left">
-                        <span className="font-sans font-bold text-[7.5px] sm:text-[8px] tracking-wide text-teal-deep dark:text-ivory block leading-tight">
-                          GabbyIntelligence
-                        </span>
-                        <span className="font-sans text-[6.5px] sm:text-[7px] text-[#D4AF67] block leading-tight">
-                          socialbusinessassistant.gabbyintelligence.com
-                        </span>
-                      </div>
+                  {/* QR 2 – Wedding Website */}
+                  <div style={{
+                    padding: '10px 12px',
+                    borderRadius: '12px',
+                    border: '1px solid rgba(212,175,103,0.4)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    justifyContent: 'space-between',
+                    backgroundColor: theme === 'ivory' ? '#FFFFFFE6' : '#063A33CC',
+                  }}>
+                    <span style={{ fontSize: '9px', fontFamily: 'sans-serif', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#D4AF67', marginBottom: '4px' }}>
+                      ◈ Wedding Website
+                    </span>
+                    <div style={{ width: '80px', height: '80px', padding: '4px', backgroundColor: '#FFFFFF', borderRadius: '8px', border: '1px solid rgba(212,175,103,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {qrWebsite && <img src={qrWebsite} alt="QR Website" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
                     </div>
+                    <div style={{ marginTop: '4px', fontSize: '8px', fontFamily: 'sans-serif', lineHeight: 1.4 }}>
+                      <p style={{ fontWeight: 700, color: '#063A33', margin: 0 }}>Our Story &amp; Gallery</p>
+                      <p style={{ color: '#6B7280', fontSize: '7.5px', margin: 0 }}>t-w-t.gabbyintelligence.com</p>
+                    </div>
+                  </div>
+                </div>
 
-                    <span className="font-serif italic text-[7.5px] sm:text-[8px] text-gray-400">
-                      Digital Guest Experience
+                {/* GabbyIntelligence Branding */}
+                <div style={{ paddingTop: '8px', borderTop: '1px solid rgba(212,175,103,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '4px', paddingRight: '4px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    {(logoDataUrl || bsaLogo) && (
+                      <img src={logoDataUrl || bsaLogo} alt="GabbyIntelligence" style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                    )}
+                    <div style={{ textAlign: 'left' }}>
+                      <span style={{ fontFamily: 'sans-serif', fontWeight: 700, fontSize: '7.5px', letterSpacing: '0.05em', color: '#063A33', display: 'block', lineHeight: 1.2 }}>GabbyIntelligence</span>
+                      <span style={{ fontFamily: 'sans-serif', fontSize: '6.5px', color: '#D4AF67', display: 'block', lineHeight: 1.2 }}>socialbusinessassistant.gabbyintelligence.com</span>
+                    </div>
+                  </div>
+                  <span style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '7.5px', color: '#9CA3AF' }}>Digital Guest Experience</span>
+                </div>
+              </div>
+
+              {/* ===================================================================
+               * CENTER FOLD LINE
+               * =================================================================== */}
+              <div style={{ position: 'relative', width: '100%', height: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', borderTop: '2px dashed rgba(212,175,103,0.5)', zIndex: 20 }}>
+                <div style={{
+                  padding: '2px 12px',
+                  borderRadius: '9999px',
+                  fontSize: '7.5px',
+                  fontFamily: 'sans-serif',
+                  letterSpacing: '0.15em',
+                  textTransform: 'uppercase',
+                  fontWeight: 700,
+                  border: '1px solid rgba(212,175,103,0.4)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  backgroundColor: theme === 'ivory' ? '#FAF6EE' : '#03241F',
+                  color: '#D4AF67',
+                  transform: 'translateY(-50%)',
+                  whiteSpace: 'nowrap',
+                }}>
+                  <span>✂</span>
+                  <span>FOLD ALONG THIS LINE (PLIER ICI)</span>
+                  <span>✂</span>
+                </div>
+              </div>
+
+              {/* ===================================================================
+               * PANEL 2 (BOTTOM HALF - FRONT FACE / FACING SITTING GUEST)
+               * =================================================================== */}
+              <div style={{
+                position: 'relative',
+                width: '100%',
+                height: '105mm',
+                padding: '20px 24px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                textAlign: 'center',
+                boxSizing: 'border-box',
+              }}>
+                {/* Monogram Seal */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px', paddingTop: '4px' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', padding: '2px', background: 'linear-gradient(135deg, #F7E7C4 0%, #D4AF67 50%, #B3883B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '100%', height: '100%', borderRadius: '50%', backgroundColor: '#063A33', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF67', fontWeight: 700, fontSize: '11px', letterSpacing: '0.08em' }}>
+                      O◈T
+                    </div>
+                  </div>
+                  <span style={{ fontFamily: 'sans-serif', fontSize: '8px', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#D4AF67', fontWeight: 700 }}>
+                    Traditional Wedding Celebration
+                  </span>
+                  <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '24px', lineHeight: 1, margin: 0, color: theme === 'ivory' ? '#063A33' : '#FAF6EE' }}>
+                    Oluwatobi &amp; Temitope
+                  </h3>
+                </div>
+
+                {/* Guest Name Centerpiece */}
+                <div style={{ margin: 'auto 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', maxWidth: '90%' }}>
+                  {/* Table Pill */}
+                  <div style={{ display: 'inline-block', padding: '4px 12px', borderRadius: '9999px', backgroundColor: '#063A33', color: '#FAF6EE', border: '1px solid #D4AF67' }}>
+                    <span style={{ fontFamily: 'sans-serif', fontSize: '9px', letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 700, color: '#D4AF67' }}>
+                      ◈ {tableNumber.toUpperCase()} ◈
                     </span>
                   </div>
-                </div>
-
-                {/* ===================================================================
-                 * CENTER FOLD GUIDE LINE
-                 * Positioned exactly at 105mm (middle of 210mm A5 sheet)
-                 * =================================================================== */}
-                <div className="relative w-full h-0 flex items-center justify-center border-t-2 border-dashed border-[#D4AF67]/50 z-20">
-                  <div
-                    className={`px-3 py-0.5 rounded-full text-[7.5px] sm:text-[8px] font-sans tracking-widest uppercase font-bold border border-[#D4AF67]/40 shadow-xs flex items-center gap-1.5 ${
-                      theme === 'ivory' ? 'bg-[#FAF6EE] text-[#D4AF67]' : 'bg-teal-forest text-[#D4AF67]'
-                    }`}
-                  >
-                    <span>✂</span>
-                    <span>FOLD ALONG THIS LINE (PLIER ICI)</span>
-                    <span>✂</span>
-                  </div>
-                </div>
-
-                {/* ===================================================================
-                 * PANEL 2 (BOTTOM HALF - FRONT FACE / FACING SITTING GUEST)
-                 * Dimensions: 148mm x 105mm
-                 * Right-side up: Features Monogram, Table Number, Guest Full Name
-                 * =================================================================== */}
-                <div className="relative w-full h-[105mm] p-5 sm:p-6 flex flex-col justify-between items-center text-center">
-                  {/* Monogram Seal & Header */}
-                  <div className="space-y-0.5 pt-1">
-                    <div
-                      className="w-9 h-9 sm:w-10 sm:h-10 mx-auto rounded-full p-0.5 shadow-gold-sm flex items-center justify-center"
-                      style={{ background: 'linear-gradient(135deg, #F7E7C4 0%, #D4AF67 50%, #B3883B 100%)' }}
-                    >
-                      <div className="w-full h-full rounded-full bg-teal-deep flex items-center justify-center text-[#D4AF67] font-display font-bold text-xs tracking-wider">
-                        O◈T
-                      </div>
-                    </div>
-
-                    <span className="font-sans text-[8px] sm:text-[9px] uppercase tracking-widest text-[#D4AF67] font-bold block">
-                      Traditional Wedding Celebration
-                    </span>
-                    <h3
-                      className={`font-script text-2xl sm:text-3xl leading-none ${
-                        theme === 'ivory' ? 'text-teal-deep' : 'text-[#FAF6EE]'
-                      }`}
-                    >
-                      Oluwatobi &amp; Temitope
-                    </h3>
-                  </div>
-
-                  {/* Main Guest Designation Centerpiece */}
-                  <div className="my-auto space-y-1.5 max-w-[90%]">
-                    {/* Table Pill */}
-                    <div className="inline-block px-3 py-1 rounded-full bg-teal-deep text-[#FAF6EE] border border-[#D4AF67] shadow-xs">
-                      <span className="font-display text-[9px] sm:text-[10px] tracking-widest uppercase font-bold text-[#D4AF67]">
-                        ◈ {tableNumber.toUpperCase()} ◈
-                      </span>
-                    </div>
-
-                    {/* Guest Full Name */}
-                    <div className="py-1">
-                      <h2
-                        className={`font-serif font-extrabold tracking-wide drop-shadow-xs ${getGuestNameFontSizeClass(
-                          guestName
-                        )} ${theme === 'ivory' ? 'text-teal-dbg-teal-deep' : 'text-[#FAF6EE]'}`}
-                      >
-                        {guestName || 'Valued Guest'}
-                      </h2>
-
-                      {guestRole && (
-                        <p className="font-sans text-[9px] sm:text-[10px] uppercase tracking-widest text-[#D4AF67] font-semibold mt-0.5">
-                          {guestRole}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Welcoming Note */}
-                    {welcomeNote && (
-                      <p
-                        className={`font-serif italic text-[8.5px] sm:text-[9.5px] max-w-75 mx-auto leading-relaxed ${
-                          theme === 'ivory' ? 'text-teal-muted' : 'text-ivory/80'
-                        }`}
-                      >
-                        "{welcomeNote}"
+                  {/* Guest Name */}
+                  <div style={{ padding: '4px 0' }}>
+                    <h2 style={{
+                      fontFamily: 'Georgia, serif',
+                      fontWeight: 800,
+                      letterSpacing: '0.03em',
+                      margin: 0,
+                      fontSize: guestName.length > 25 ? '14px' : guestName.length > 18 ? '17px' : '21px',
+                      color: theme === 'ivory' ? '#063A33' : '#FAF6EE',
+                    }}>
+                      {guestName || 'Valued Guest'}
+                    </h2>
+                    {guestRole && (
+                      <p style={{ fontFamily: 'sans-serif', fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#D4AF67', fontWeight: 600, margin: '2px 0 0' }}>
+                        {guestRole}
                       </p>
                     )}
                   </div>
+                  {/* Welcome Note */}
+                  {welcomeNote && (
+                    <p style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '8.5px', maxWidth: '300px', margin: '0 auto', lineHeight: 1.5, color: theme === 'ivory' ? '#385A53' : '#FAF6EEBF' }}>
+                      "{welcomeNote}"
+                    </p>
+                  )}
+                </div>
 
-                  {/* Date & Location Footer */}
-                  <div className="w-full pt-1.5 border-t border-[#D4AF67]/20 flex items-center justify-between text-[7.5px] sm:text-[8px] font-serif text-[#D4AF67]">
-                    <span>Saturday, 21st November 2026</span>
-                    <span>&bull;</span>
-                    <span>Lagos, Nigeria</span>
-                  </div>
+                {/* Date & Location Footer */}
+                <div style={{ width: '100%', paddingTop: '6px', borderTop: '1px solid rgba(212,175,103,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '7.5px', fontFamily: 'Georgia, serif', color: '#D4AF67' }}>
+                  <span>Saturday, 21st November 2026</span>
+                  <span>·</span>
+                  <span>Lagos, Nigeria</span>
                 </div>
               </div>
             </div>
+          </div>
         </div>
       </div>
 
