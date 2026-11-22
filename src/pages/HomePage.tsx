@@ -8,16 +8,8 @@ import {
   WeddingIMG3,
   PictureWedding,
 } from '../assets/images'
-import { sendRSVPEmail } from '../services/emailjs'
 
 export default function HomePage() {
-  const [guestName, setGuestName] = useState('')
-  const [attending, setAttending] = useState<'yes' | 'no'>('yes')
-  const [guestCount, setGuestCount] = useState('1')
-  const [message, setMessage] = useState('')
-  const [submitted, setSubmitted] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null)
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null)
 
   // Countdown timer to November 21st
@@ -52,33 +44,6 @@ export default function HomePage() {
     const interval = setInterval(updateCountdown, 1000)
     return () => clearInterval(interval)
   }, [])
-
-  const handleSubmitRSVP = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!guestName.trim() || isSubmitting) return
-
-    setIsSubmitting(true)
-    setSubmitError(null)
-
-    try {
-      await sendRSVPEmail({
-        guestName: guestName.trim(),
-        attending,
-        guestCount,
-        message,
-      })
-      setSubmitted(true)
-    } catch (err: unknown) {
-      console.error('Failed to submit RSVP:', err)
-      const errorMessage =
-        err instanceof Error
-          ? err.message
-          : 'Unable to send your RSVP right now. Please try again or reach out to the couple directly.'
-      setSubmitError(errorMessage)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
 
   return (
     <motion.div
@@ -160,7 +125,7 @@ export default function HomePage() {
           {/* Action CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <a href="#rsvp" className="btn-gold w-full sm:w-auto text-center">
-              RSVP &bull; Confirm Attendance
+              Ceremony Concluded &bull; Thank You
             </a>
             <Link to="/gifts" className="btn-teal w-full sm:w-auto text-center cursor-pointer inline-block">
               Cash Gifts &amp; Registry &rarr;
@@ -623,169 +588,45 @@ export default function HomePage() {
         <div className="max-w-3xl mx-auto px-6 relative">
           <div className="text-center space-y-3 mb-12">
             <span className="font-serif italic text-champagne text-base sm:text-lg block">
-              Will You Celebrate With Us?
+              With Sincere Gratitude
             </span>
             <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-ivory font-normal tracking-wide">
-              RSVP &amp; Well Wishes
+              Celebration Concluded
             </h2>
             <div className="wedding-divider">
               <div className="wedding-divider-diamond"></div>
             </div>
             <p className="font-serif text-base text-ivory/80 max-w-lg mx-auto">
-              Please let us know if you will be attending our traditional wedding ceremony so we can prepare your seat.
+              Our traditional wedding ceremony has joyfully taken place. Thank you to everyone who honored us with their presence, prayers, and warm wishes.
             </p>
           </div>
 
-          <div className="p-8 sm:p-12 rounded-3xl bg-ivory text-teal-deep shadow-2xl border-2 border-champagne">
-            {submitted ? (
-              <div className="text-center py-10 space-y-4">
-                <div className="w-16 h-16 rounded-full bg-teal-deep text-champagne mx-auto flex items-center justify-center border-2 border-champagne">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <h3 className="font-display text-2xl font-bold text-teal-deep">
-                  Thank You, {guestName}!
-                </h3>
-                <p className="font-serif text-base text-teal-muted max-w-md mx-auto">
-                  {attending === 'yes'
-                    ? 'Your RSVP has been joyfully received! We cannot wait to celebrate with you on November 21st in Lagos.'
-                    : 'Thank you for letting us know and sending your sweet thoughts. You will be dearly missed!'}
-                </p>
-                <div className="pt-4">
-                  <button
-                    onClick={() => {
-                      setSubmitted(false)
-                      setGuestName('')
-                      setMessage('')
-                      setSubmitError(null)
-                    }}
-                    className="btn-teal text-xs"
-                  >
-                    Submit Another RSVP
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmitRSVP} className="space-y-6">
-                <div>
-                  <label className="block font-serif font-bold text-sm text-teal-deep mb-2">
-                    Your Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={guestName}
-                    onChange={(e) => setGuestName(e.target.value)}
-                    placeholder="e.g. Samuel Adeleke"
-                    className="w-full px-4 py-3 rounded-xl border border-champagne/60 bg-white text-teal-deep focus:outline-none focus:ring-2 focus:ring-champagne font-sans text-sm"
-                  />
-                </div>
+          <div className="p-8 sm:p-12 rounded-3xl bg-ivory text-teal-deep shadow-2xl border-2 border-champagne text-center space-y-6">
+            <div className="w-16 h-16 rounded-full bg-teal-deep text-champagne mx-auto flex items-center justify-center border-2 border-champagne shadow-gold-sm">
+              <span className="text-2xl">❤️</span>
+            </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block font-serif font-bold text-sm text-teal-deep mb-2">
-                      Will You Be Attending? *
-                    </label>
-                    <div className="grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setAttending('yes')}
-                        className={`py-3 px-3 rounded-xl font-sans text-xs uppercase tracking-wider font-semibold border transition-all ${
-                          attending === 'yes'
-                            ? 'bg-teal-deep text-ivory border-teal-deep shadow-sm'
-                            : 'bg-white text-teal-muted border-champagne/60 hover:bg-champagne/10'
-                        }`}
-                      >
-                        Joyfully Accept
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setAttending('no')}
-                        className={`py-3 px-3 rounded-xl font-sans text-xs uppercase tracking-wider font-semibold border transition-all ${
-                          attending === 'no'
-                            ? 'bg-teal-deep text-ivory border-teal-deep shadow-sm'
-                            : 'bg-white text-teal-muted border-champagne/60 hover:bg-champagne/10'
-                        }`}
-                      >
-                        Regretfully Decline
-                      </button>
-                    </div>
-                  </div>
+            <div className="space-y-2">
+              <span className="inline-block px-3.5 py-1 rounded-full bg-teal-deep/10 text-teal-deep font-sans text-xs uppercase tracking-widest font-bold border border-teal-deep/20">
+                RSVP Closed
+              </span>
+              <h3 className="font-display text-2xl sm:text-3xl font-bold text-teal-deep">
+                Thank You for Celebrating With Us!
+              </h3>
+            </div>
 
-                  <div>
-                    <label className="block font-serif font-bold text-sm text-teal-deep mb-2">
-                      Number of Guests
-                    </label>
-                    <select
-                      value={guestCount}
-                      onChange={(e) => setGuestCount(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-champagne/60 bg-white text-teal-deep focus:outline-none focus:ring-2 focus:ring-champagne font-sans text-sm"
-                    >
-                      <option value="1">1 Person</option>
-                      <option value="2">2 Persons (+1)</option>
-                      <option value="3">3 Persons</option>
-                      <option value="4">4 Persons (Family)</option>
-                    </select>
-                  </div>
-                </div>
+            <p className="font-serif text-base sm:text-lg text-teal-muted max-w-lg mx-auto leading-relaxed">
+              The ceremony has ended, and RSVP submissions are now officially closed. We are overwhelmed by the outpouring of love, blessings, and goodwill showered upon our union.
+            </p>
 
-                <div>
-                  <label className="block font-serif font-bold text-sm text-teal-deep mb-2">
-                    Prayer or Note for Tobi &amp; Tope
-                  </label>
-                  <textarea
-                    rows={4}
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Share your prayers, best wishes, and excitement for the happy couple..."
-                    className="w-full px-4 py-3 rounded-xl border border-champagne/60 bg-white text-teal-deep focus:outline-none focus:ring-2 focus:ring-champagne font-sans text-sm"
-                  ></textarea>
-                </div>
-
-                {submitError && (
-                  <div className="p-3.5 rounded-xl bg-red-500/15 border border-red-500/40 text-red-700 text-xs font-sans text-center">
-                    {submitError}
-                  </div>
-                )}
-
-                <div className="pt-2">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="btn-gold w-full text-center flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <svg
-                          className="animate-spin h-4 w-4 text-teal-deep"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          ></path>
-                        </svg>
-                        <span>Sending RSVP...</span>
-                      </>
-                    ) : (
-                      'Submit RSVP'
-                    )}
-                  </button>
-                </div>
-              </form>
-            )}
+            <div className="pt-4 border-t border-champagne/40 max-w-md mx-auto">
+              <p className="font-serif italic text-sm text-teal-muted">
+                With heartfelt appreciation &amp; love,<br />
+                <span className="font-display text-base font-bold text-teal-deep block mt-1">
+                  Oluwatobi &amp; Temitope Fasedemi
+                </span>
+              </p>
+            </div>
           </div>
 
           {/* Cash Gifts Callout Banner on Home Page */}

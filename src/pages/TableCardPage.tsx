@@ -154,7 +154,7 @@ export default function TableCardPage() {
             card.style.height = '794px'
             card.style.minHeight = '794px'
             card.style.maxHeight = '794px'
-            card.style.position = 'static'
+            card.style.position = 'relative'
             card.style.margin = '0'
           }
         },
@@ -206,7 +206,7 @@ export default function TableCardPage() {
             card.style.height = '794px'
             card.style.minHeight = '794px'
             card.style.maxHeight = '794px'
-            card.style.position = 'static'
+            card.style.position = 'relative'
             card.style.margin = '0'
           }
         },
@@ -738,8 +738,8 @@ export default function TableCardPage() {
                       {qrGifts && <img src={qrGifts} alt="QR Cash Gift" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
                     </div>
                     <div style={{ marginTop: '6px', fontSize: '8.5px', fontFamily: 'sans-serif', lineHeight: 1.4 }}>
-                      <p style={{ fontWeight: 700, color: theme === 'ivory' ? '#063A33' : '#FAF6EE', margin: 0 }}>Access Bank · 0774559702</p>
-                      <p style={{ color: theme === 'ivory' ? '#6B7280' : '#D4AF67', fontSize: '8px', margin: 0 }}>Oluwatobi Fasedemi</p>
+                      <p style={{ fontWeight: 700, color: theme === 'ivory' ? '#063A33' : '#FAF6EE', margin: 0 }}>Scan to Send Cash Gift</p>
+                      <p style={{ color: theme === 'ivory' ? '#6B7280' : '#D4AF67', fontSize: '8px', margin: 0 }}>Registry &amp; Account Online</p>
                     </div>
                   </div>
 
