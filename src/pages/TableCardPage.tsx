@@ -137,11 +137,27 @@ export default function TableCardPage() {
 
     try {
       const canvas = await html2canvas(targetEl as HTMLElement, {
-        scale: 2.5, // Crisp 300 DPI print quality
+        scale: 3, // Crisp 300 DPI print quality
         useCORS: true,
         allowTaint: false,
         logging: false,
         backgroundColor: theme === 'ivory' ? '#FAF6EE' : '#03241F',
+        width: 560,
+        height: 794,
+        windowWidth: 1200,
+        onclone: (clonedDoc) => {
+          const card = clonedDoc.getElementById('printable-table-card')
+          if (card) {
+            card.style.width = '560px'
+            card.style.minWidth = '560px'
+            card.style.maxWidth = '560px'
+            card.style.height = '794px'
+            card.style.minHeight = '794px'
+            card.style.maxHeight = '794px'
+            card.style.position = 'static'
+            card.style.margin = '0'
+          }
+        },
       })
 
       const dataUrl = canvas.toDataURL('image/png')
@@ -171,13 +187,29 @@ export default function TableCardPage() {
     setStatusMessage('Generating print-ready A5 PDF...')
 
     try {
-      // Safe capture scale for high-DPI A5 print without exceeding browser canvas memory limits
+      // Safe capture scale for high-DPI A5 print with fixed A5 proportions
       const canvas = await html2canvas(targetEl as HTMLElement, {
-        scale: 2.5,
+        scale: 3,
         useCORS: true,
         allowTaint: false,
         logging: false,
         backgroundColor: theme === 'ivory' ? '#FAF6EE' : '#03241F',
+        width: 560,
+        height: 794,
+        windowWidth: 1200,
+        onclone: (clonedDoc) => {
+          const card = clonedDoc.getElementById('printable-table-card')
+          if (card) {
+            card.style.width = '560px'
+            card.style.minWidth = '560px'
+            card.style.maxWidth = '560px'
+            card.style.height = '794px'
+            card.style.minHeight = '794px'
+            card.style.maxHeight = '794px'
+            card.style.position = 'static'
+            card.style.margin = '0'
+          }
+        },
       })
 
       // A5 portrait dimensions: 148mm width x 210mm height
@@ -613,9 +645,10 @@ export default function TableCardPage() {
               id="printable-table-card"
               style={{
                 position: 'relative',
-                width: '148mm',
-                height: '210mm',
-                maxWidth: '100%',
+                width: '560px',
+                minWidth: '560px',
+                height: '794px',
+                minHeight: '794px',
                 overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column',
@@ -626,11 +659,11 @@ export default function TableCardPage() {
                 fontFamily: 'sans-serif',
               }}
             >
-              {/* Outer Gold Border */}
+              {/* Outer Gold Filigree Border */}
               <div
                 style={{
                   position: 'absolute',
-                  inset: '8px',
+                  inset: '10px',
                   borderRadius: '16px',
                   border: '2px solid #D4AF67',
                   pointerEvents: 'none',
@@ -651,13 +684,17 @@ export default function TableCardPage() {
 
               {/* ===================================================================
                * PANEL 1 (TOP HALF - BACK DISPLAY / STANDING FACING OUTWARD)
+               * Exactly 397px (50% of 794px A5 height)
                * =================================================================== */}
               <div
                 style={{
                   position: 'relative',
                   width: '100%',
-                  height: '105mm',
-                  padding: '20px 24px',
+                  height: '397px',
+                  minHeight: '397px',
+                  maxHeight: '397px',
+                  flex: '0 0 397px',
+                  padding: '24px 28px',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
@@ -668,92 +705,105 @@ export default function TableCardPage() {
               >
                 {/* Top Crest & Header */}
                 <div style={{ textAlign: 'center', paddingTop: '4px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '4px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '6px' }}>
                     <span style={{ height: '1px', width: '24px', backgroundColor: '#D4AF67', display: 'block' }} />
                     <span style={{ fontFamily: 'sans-serif', fontSize: '9px', letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 700, color: '#D4AF67' }}>
                       Celebrate · Bless · Connect
                     </span>
                     <span style={{ height: '1px', width: '24px', backgroundColor: '#D4AF67', display: 'block' }} />
                   </div>
-                  <h4 style={{ fontFamily: 'Georgia, serif', fontSize: '24px', lineHeight: 1, margin: 0, color: theme === 'ivory' ? '#063A33' : '#FAF6EE' }}>
+                  <h4 style={{ fontFamily: 'Georgia, serif', fontSize: '24px', lineHeight: 1.1, margin: 0, color: theme === 'ivory' ? '#063A33' : '#FAF6EE' }}>
                     Oluwatobi &amp; Temitope
                   </h4>
                 </div>
 
                 {/* Dual QR Codes */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', margin: 'auto 0', padding: '0 4px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', margin: 'auto 0', padding: '0 8px' }}>
                   {/* QR 1 – Cash Gift */}
                   <div style={{
-                    padding: '10px 12px',
-                    borderRadius: '12px',
+                    padding: '12px',
+                    borderRadius: '14px',
                     border: '1px solid rgba(212,175,103,0.4)',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     textAlign: 'center',
                     justifyContent: 'space-between',
-                    backgroundColor: theme === 'ivory' ? '#FFFFFFE6' : '#063A33CC',
+                    backgroundColor: theme === 'ivory' ? '#FFFFFFE6' : 'rgba(6,58,51,0.85)',
                   }}>
-                    <span style={{ fontSize: '9px', fontFamily: 'sans-serif', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#D4AF67', marginBottom: '4px' }}>
+                    <span style={{ fontSize: '9.5px', fontFamily: 'sans-serif', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#D4AF67', marginBottom: '6px' }}>
                       ◈ Send Cash Gift
                     </span>
-                    <div style={{ width: '80px', height: '80px', padding: '4px', backgroundColor: '#FFFFFF', borderRadius: '8px', border: '1px solid rgba(212,175,103,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '84px', height: '84px', padding: '4px', backgroundColor: '#FFFFFF', borderRadius: '8px', border: '1px solid rgba(212,175,103,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {qrGifts && <img src={qrGifts} alt="QR Cash Gift" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
                     </div>
-                    <div style={{ marginTop: '4px', fontSize: '8px', fontFamily: 'sans-serif', lineHeight: 1.4 }}>
-                      <p style={{ fontWeight: 700, color: '#063A33', margin: 0 }}>Access Bank · 0774559702</p>
-                      <p style={{ color: '#6B7280', fontSize: '7.5px', margin: 0 }}>Oluwatobi Fasedemi</p>
+                    <div style={{ marginTop: '6px', fontSize: '8.5px', fontFamily: 'sans-serif', lineHeight: 1.4 }}>
+                      <p style={{ fontWeight: 700, color: theme === 'ivory' ? '#063A33' : '#FAF6EE', margin: 0 }}>Access Bank · 0774559702</p>
+                      <p style={{ color: theme === 'ivory' ? '#6B7280' : '#D4AF67', fontSize: '8px', margin: 0 }}>Oluwatobi Fasedemi</p>
                     </div>
                   </div>
 
                   {/* QR 2 – Wedding Website */}
                   <div style={{
-                    padding: '10px 12px',
-                    borderRadius: '12px',
+                    padding: '12px',
+                    borderRadius: '14px',
                     border: '1px solid rgba(212,175,103,0.4)',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     textAlign: 'center',
                     justifyContent: 'space-between',
-                    backgroundColor: theme === 'ivory' ? '#FFFFFFE6' : '#063A33CC',
+                    backgroundColor: theme === 'ivory' ? '#FFFFFFE6' : 'rgba(6,58,51,0.85)',
                   }}>
-                    <span style={{ fontSize: '9px', fontFamily: 'sans-serif', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#D4AF67', marginBottom: '4px' }}>
+                    <span style={{ fontSize: '9.5px', fontFamily: 'sans-serif', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#D4AF67', marginBottom: '6px' }}>
                       ◈ Wedding Website
                     </span>
-                    <div style={{ width: '80px', height: '80px', padding: '4px', backgroundColor: '#FFFFFF', borderRadius: '8px', border: '1px solid rgba(212,175,103,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '84px', height: '84px', padding: '4px', backgroundColor: '#FFFFFF', borderRadius: '8px', border: '1px solid rgba(212,175,103,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {qrWebsite && <img src={qrWebsite} alt="QR Website" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
                     </div>
-                    <div style={{ marginTop: '4px', fontSize: '8px', fontFamily: 'sans-serif', lineHeight: 1.4 }}>
-                      <p style={{ fontWeight: 700, color: '#063A33', margin: 0 }}>Our Story &amp; Gallery</p>
-                      <p style={{ color: '#6B7280', fontSize: '7.5px', margin: 0 }}>t-w-t.gabbyintelligence.com</p>
+                    <div style={{ marginTop: '6px', fontSize: '8.5px', fontFamily: 'sans-serif', lineHeight: 1.4 }}>
+                      <p style={{ fontWeight: 700, color: theme === 'ivory' ? '#063A33' : '#FAF6EE', margin: 0 }}>Our Story &amp; Gallery</p>
+                      <p style={{ color: theme === 'ivory' ? '#6B7280' : '#D4AF67', fontSize: '8px', margin: 0 }}>t-w-t.gabbyintelligence.com</p>
                     </div>
                   </div>
                 </div>
 
                 {/* GabbyIntelligence Branding */}
                 <div style={{ paddingTop: '8px', borderTop: '1px solid rgba(212,175,103,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '4px', paddingRight: '4px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     {(logoDataUrl || bsaLogo) && (
-                      <img src={logoDataUrl || bsaLogo} alt="GabbyIntelligence" style={{ width: '20px', height: '20px', objectFit: 'contain', borderRadius: '4px' }} />
+                      <img src={logoDataUrl || bsaLogo} alt="GabbyIntelligence" style={{ width: '22px', height: '22px', objectFit: 'contain', borderRadius: '4px' }} />
                     )}
                     <div style={{ textAlign: 'left' }}>
-                      <span style={{ fontFamily: 'sans-serif', fontWeight: 700, fontSize: '7.5px', letterSpacing: '0.05em', color: '#063A33', display: 'block', lineHeight: 1.2 }}>GabbyIntelligence</span>
-                      <span style={{ fontFamily: 'sans-serif', fontSize: '6.5px', color: '#D4AF67', display: 'block', lineHeight: 1.2 }}>socialbusinessassistant.gabbyintelligence.com</span>
+                      <span style={{ fontFamily: 'sans-serif', fontWeight: 700, fontSize: '8px', letterSpacing: '0.05em', color: theme === 'ivory' ? '#063A33' : '#FAF6EE', display: 'block', lineHeight: 1.2 }}>GabbyIntelligence</span>
+                      <span style={{ fontFamily: 'sans-serif', fontSize: '7px', color: '#D4AF67', display: 'block', lineHeight: 1.2 }}>socialbusinessassistant.gabbyintelligence.com</span>
                     </div>
                   </div>
-                  <span style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '7.5px', color: '#9CA3AF' }}>Digital Guest Experience</span>
+                  <span style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '8px', color: theme === 'ivory' ? '#9CA3AF' : 'rgba(250,246,238,0.5)' }}>Digital Guest Experience</span>
                 </div>
               </div>
 
               {/* ===================================================================
                * CENTER FOLD LINE
+               * Positioned exactly at the 50% boundary (397px of 794px)
                * =================================================================== */}
-              <div style={{ position: 'relative', width: '100%', height: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', borderTop: '2px dashed rgba(212,175,103,0.5)', zIndex: 20 }}>
+              <div style={{
+                position: 'absolute',
+                top: '397px',
+                left: 0,
+                width: '100%',
+                height: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderTop: '2px dashed rgba(212,175,103,0.5)',
+                zIndex: 20,
+                transform: 'translateY(-50%)',
+              }}>
                 <div style={{
-                  padding: '2px 12px',
+                  padding: '2px 14px',
                   borderRadius: '9999px',
-                  fontSize: '7.5px',
+                  fontSize: '8px',
                   fontFamily: 'sans-serif',
                   letterSpacing: '0.15em',
                   textTransform: 'uppercase',
@@ -764,7 +814,6 @@ export default function TableCardPage() {
                   gap: '6px',
                   backgroundColor: theme === 'ivory' ? '#FAF6EE' : '#03241F',
                   color: '#D4AF67',
-                  transform: 'translateY(-50%)',
                   whiteSpace: 'nowrap',
                 }}>
                   <span>✂</span>
@@ -775,12 +824,16 @@ export default function TableCardPage() {
 
               {/* ===================================================================
                * PANEL 2 (BOTTOM HALF - FRONT FACE / FACING SITTING GUEST)
+               * Exactly 397px (50% of 794px A5 height)
                * =================================================================== */}
               <div style={{
                 position: 'relative',
                 width: '100%',
-                height: '105mm',
-                padding: '20px 24px',
+                height: '397px',
+                minHeight: '397px',
+                maxHeight: '397px',
+                flex: '0 0 397px',
+                padding: '24px 28px',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
@@ -789,58 +842,59 @@ export default function TableCardPage() {
                 boxSizing: 'border-box',
               }}>
                 {/* Monogram Seal */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px', paddingTop: '4px' }}>
-                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', padding: '2px', background: 'linear-gradient(135deg, #F7E7C4 0%, #D4AF67 50%, #B3883B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div style={{ width: '100%', height: '100%', borderRadius: '50%', backgroundColor: '#063A33', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF67', fontWeight: 700, fontSize: '11px', letterSpacing: '0.08em' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', paddingTop: '4px' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', padding: '2px', background: 'linear-gradient(135deg, #F7E7C4 0%, #D4AF67 50%, #B3883B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '100%', height: '100%', borderRadius: '50%', backgroundColor: '#063A33', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF67', fontWeight: 700, fontSize: '12px', letterSpacing: '0.08em' }}>
                       O◈T
                     </div>
                   </div>
-                  <span style={{ fontFamily: 'sans-serif', fontSize: '8px', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#D4AF67', fontWeight: 700 }}>
+                  <span style={{ fontFamily: 'sans-serif', fontSize: '8.5px', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#D4AF67', fontWeight: 700 }}>
                     Traditional Wedding Celebration
                   </span>
-                  <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '24px', lineHeight: 1, margin: 0, color: theme === 'ivory' ? '#063A33' : '#FAF6EE' }}>
+                  <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '24px', lineHeight: 1.1, margin: 0, color: theme === 'ivory' ? '#063A33' : '#FAF6EE' }}>
                     Oluwatobi &amp; Temitope
                   </h3>
                 </div>
 
                 {/* Guest Name Centerpiece */}
-                <div style={{ margin: 'auto 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', maxWidth: '90%' }}>
+                <div style={{ margin: 'auto 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', maxWidth: '90%' }}>
                   {/* Table Pill */}
-                  <div style={{ display: 'inline-block', padding: '4px 12px', borderRadius: '9999px', backgroundColor: '#063A33', color: '#FAF6EE', border: '1px solid #D4AF67' }}>
-                    <span style={{ fontFamily: 'sans-serif', fontSize: '9px', letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 700, color: '#D4AF67' }}>
+                  <div style={{ display: 'inline-block', padding: '4px 14px', borderRadius: '9999px', backgroundColor: '#063A33', color: '#FAF6EE', border: '1px solid #D4AF67' }}>
+                    <span style={{ fontFamily: 'sans-serif', fontSize: '9.5px', letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 700, color: '#D4AF67' }}>
                       ◈ {tableNumber.toUpperCase()} ◈
                     </span>
                   </div>
                   {/* Guest Name */}
-                  <div style={{ padding: '4px 0' }}>
+                  <div style={{ padding: '2px 0' }}>
                     <h2 style={{
                       fontFamily: 'Georgia, serif',
                       fontWeight: 800,
-                      letterSpacing: '0.03em',
+                      letterSpacing: '0.02em',
                       margin: 0,
-                      fontSize: guestName.length > 25 ? '14px' : guestName.length > 18 ? '17px' : '21px',
+                      fontSize: guestName.length > 28 ? '18px' : guestName.length > 18 ? '21px' : '26px',
+                      lineHeight: 1.2,
                       color: theme === 'ivory' ? '#063A33' : '#FAF6EE',
                     }}>
                       {guestName || 'Valued Guest'}
                     </h2>
                     {guestRole && (
-                      <p style={{ fontFamily: 'sans-serif', fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#D4AF67', fontWeight: 600, margin: '2px 0 0' }}>
+                      <p style={{ fontFamily: 'sans-serif', fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#D4AF67', fontWeight: 600, margin: '4px 0 0' }}>
                         {guestRole}
                       </p>
                     )}
                   </div>
                   {/* Welcome Note */}
                   {welcomeNote && (
-                    <p style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '8.5px', maxWidth: '300px', margin: '0 auto', lineHeight: 1.5, color: theme === 'ivory' ? '#385A53' : '#FAF6EEBF' }}>
+                    <p style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '9px', maxWidth: '320px', margin: '0 auto', lineHeight: 1.5, color: theme === 'ivory' ? '#385A53' : 'rgba(250,246,238,0.75)' }}>
                       "{welcomeNote}"
                     </p>
                   )}
                 </div>
 
                 {/* Date & Location Footer */}
-                <div style={{ width: '100%', paddingTop: '6px', borderTop: '1px solid rgba(212,175,103,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '7.5px', fontFamily: 'Georgia, serif', color: '#D4AF67' }}>
+                <div style={{ width: '100%', paddingTop: '8px', borderTop: '1px solid rgba(212,175,103,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '8px', fontFamily: 'Georgia, serif', color: '#D4AF67' }}>
                   <span>Saturday, 21st November 2026</span>
-                  <span>·</span>
+                  <span>•</span>
                   <span>Lagos, Nigeria</span>
                 </div>
               </div>
